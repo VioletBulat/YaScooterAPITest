@@ -79,21 +79,22 @@ public class CreateOrderTest {
                 "}";
 
         Response responsePost = given()
-                .contentType(ContentType.JSON)
+                .spec(Specifications.requestSpec(URL))
                 .body(requestBody)
                 .when()
-                .post(URL + "api/v1/orders")
+                .post("/api/v1/orders")
                 .then()
+                .spec(Specifications.responseSpecUnique(201))
                 .extract().response();
 
         responsePost.then().assertThat().body("track", notNullValue());
         int trackNumber = responsePost.path("track");
 
         given()
+                .spec(Specifications.requestSpec(URL))
                 .when()
-                .get(URL + "api/v1/orders/track?t=" + trackNumber)
+                .get("/api/v1/orders/track?t=" + trackNumber)
                 .then()
-                .assertThat()
-                .statusCode(200);
+                .spec(Specifications.responseSpecOk200());
     }
 }

@@ -26,7 +26,7 @@ public class CreateCourierTest {
     @DisplayName("Создание курьера")
     @Description("Тест на проверку, что новый курьер создается успешно")
     public void createCourierOk201Test() {
-        Specifications.installSpecification(Specifications.requestSpec(URL), Specifications.responseSpecUnique(201));
+        //Specifications.installSpecification(Specifications.requestSpec(URL), Specifications.responseSpecUnique(201));
 
         HashMap<String, String> courier = new HashMap<>();
         courier.put("login", testWord);
@@ -34,10 +34,12 @@ public class CreateCourierTest {
         courier.put("firstName", testWord);
 
         given()
+                .spec(Specifications.requestSpec(URL))
                 .body(courier)
                 .when()
                 .post("/api/v1/courier")
-                .then().log().all();
+                .then().log().all()
+                .spec(Specifications.responseSpecUnique(201));
 
         isCourierExists = true;
     }
@@ -46,7 +48,7 @@ public class CreateCourierTest {
     @DisplayName("Создание двух одинаковых курьеров")
     @Description("Тест на проверку, что нельзя создать двух одинаковых курьеров")
     public void createExistingCourierError409Test() {
-        Specifications.installSpecification(Specifications.requestSpec(URL), Specifications.responseSpecUnique(201));
+        //Specifications.installSpecification(Specifications.requestSpec(URL), Specifications.responseSpecUnique(201));
 
         HashMap<String, String> firstCourier = new HashMap<>();
         firstCourier.put("login", testWord);
@@ -54,12 +56,14 @@ public class CreateCourierTest {
         firstCourier.put("firstName", testWord);
 
         given()
+                .spec(Specifications.requestSpec(URL))
                 .body(firstCourier)
                 .when()
                 .post("/api/v1/courier")
-                .then().log().all();
+                .then().log().all()
+                .spec(Specifications.responseSpecUnique(201));
 
-        Specifications.installSpecification(Specifications.requestSpec(URL), Specifications.responseSpecUnique(409));
+        //Specifications.installSpecification(Specifications.requestSpec(URL), Specifications.responseSpecUnique(409));
 
         HashMap<String, String> secondCourier = new HashMap<>();
         secondCourier.put("login", testWord);
@@ -67,10 +71,12 @@ public class CreateCourierTest {
         secondCourier.put("firstName", testWord);
 
         given()
+                .spec(Specifications.requestSpec(URL))
                 .body(secondCourier)
                 .when()
                 .post("/api/v1/courier")
-                .then().log().all();
+                .then().log().all()
+                .spec(Specifications.responseSpecUnique(409));
 
         isCourierExists = true;
     }
@@ -79,7 +85,7 @@ public class CreateCourierTest {
     @DisplayName("Попытка войти без логина")
     @Description("Тест на проверку, что нельзя войти без логина")
     public void missingLoginTest() {
-        Specifications.installSpecification(Specifications.requestSpec(URL), Specifications.responseSpecError400());
+        //Specifications.installSpecification(Specifications.requestSpec(URL), Specifications.responseSpecError400());
 
         HashMap<String, String> courier = new HashMap<>();
         courier.put("login", "");
@@ -87,17 +93,19 @@ public class CreateCourierTest {
         courier.put("firstName", testWord);
 
         given()
+                .spec(Specifications.requestSpec(URL))
                 .body(courier)
                 .when()
                 .post("/api/v1/courier")
-                .then().log().all();
+                .then().log().all()
+                .spec(Specifications.responseSpecError400());
     }
 
     @Test
     @DisplayName("Попытка войти без пароля")
     @Description("Тест на проверку, что нельзя войти без пароля")
     public void missingPasswordTest() {
-        Specifications.installSpecification(Specifications.requestSpec(URL), Specifications.responseSpecError400());
+        //Specifications.installSpecification(Specifications.requestSpec(URL), Specifications.responseSpecError400());
 
         HashMap<String, String> courier = new HashMap<>();
         courier.put("login", testWord);
@@ -105,33 +113,40 @@ public class CreateCourierTest {
         courier.put("firstName", testWord);
 
         given()
+                .spec(Specifications.requestSpec(URL))
                 .body(courier)
                 .when()
                 .post("/api/v1/courier")
-                .then().log().all();
+                .then().log().all()
+                .spec(Specifications.responseSpecError400());
     }
 
     @After
     public void deleteCourier() {
         if (isCourierExists) {
-            Specifications.installSpecification(Specifications.requestSpec(URL), Specifications.responseSpecOk200());
+            //Specifications.installSpecification(Specifications.requestSpec(URL), Specifications.responseSpecOk200());
 
             HashMap<String, String> courier = new HashMap<>();
             courier.put("login", testWord);
             courier.put("password", testWord);
 
             Response loginResponse = given()
+                    .spec(Specifications.requestSpec(URL))
                     .body(courier)
                     .when()
                     .post("/api/v1/courier/login")
                     .then().log().all()
+                    .spec(Specifications.responseSpecOk200())
                     .extract().response();
 
             int courierId = loginResponse.then().extract().path("id");
 
             given()
+                    .spec(Specifications.requestSpec(URL))
                     .when()
-                    .delete("/api/v1/courier/" + courierId);
+                    .delete("/api/v1/courier/" + courierId)
+                    .then()
+                    .spec(Specifications.responseSpecOk200());
         }
     }
 }

@@ -38,3 +38,4 @@ public class Specifications {
                 .build();
     }
 }
+// RestAssured.reset() для сброса статуса после каждого теста
