@@ -19,7 +19,6 @@ public class CheckCourierLoginTest {
 
     @Before
     public void createCourier() {
-        //Specifications.installSpecification(Specifications.requestSpec(URL), Specifications.responseSpecUnique(201));
 
         HashMap<String, String> courier = new HashMap<>();
         courier.put("login", testWord);
@@ -39,7 +38,6 @@ public class CheckCourierLoginTest {
     @DisplayName("Успешный логин")
     @Description("Тест на проверку, что курьер может залогиниться")
     public void courierCanLoginTest() {
-        //Specifications.installSpecification(Specifications.requestSpec(URL), Specifications.responseSpecOk200());
 
         HashMap<String, String> courier = new HashMap<>();
         courier.put("login", testWord);
@@ -61,7 +59,6 @@ public class CheckCourierLoginTest {
     @DisplayName("Попытка войти без логина")
     @Description("Тест на проверку, что нельзя залогиниться без логина")
     public void missingLoginTest() {
-        //Specifications.installSpecification(Specifications.requestSpec(URL), Specifications.responseSpecError400());
 
         HashMap<String, String> courier = new HashMap<>();
         courier.put("login", "");
@@ -80,7 +77,6 @@ public class CheckCourierLoginTest {
     @DisplayName("Попытка войти без пароля")
     @Description("Тест на проверку, что нельзя залогиниться без пароля")
     public void missingPasswordTest() {
-        //Specifications.installSpecification(Specifications.requestSpec(URL), Specifications.responseSpecError400());
 
         HashMap<String, String> courier = new HashMap<>();
         courier.put("login", testWord);
@@ -97,7 +93,6 @@ public class CheckCourierLoginTest {
 
     @After
     public void deleteCourier() {
-        //Specifications.installSpecification(Specifications.requestSpec(URL), Specifications.responseSpecOk200());
 
         HashMap<String, String> courier = new HashMap<>();
         courier.put("login", testWord);
